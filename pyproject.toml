@@ -1,7 +1,7 @@
 [project]
-name = "manim-test"
+name = "Manimations"
 version = "0.1.0"
-description = "Add your description here"
+description = "This repository holds animations made with [Manim](https://github.com/ManimCommunity/manim) to illustrate software concepts."
 readme = "README.md"
 requires-python = "==3.13.*"
 dependencies = [

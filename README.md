@@ -1,10 +1,10 @@
-# Animations
+# Manimations
 
-This repository holds animations to illustrate software concepts.
+This repository holds animations made with [Manim](https://github.com/ManimCommunity/manim) to illustrate software concepts.
 
-to render, use
+To render, use
 
 ```bash
 uv run manim -pql <.py> # Low Quality
-uv run manim -pql <.py> # High Quality
+uv run manim -pqh <.py> # High Quality
 ```
