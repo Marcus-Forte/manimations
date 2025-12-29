@@ -1,30 +1,30 @@
 from manim import *
-from helpers import *
+from common.helpers import *
 
-PROTO_DEF = "A"
-# PROTO_DEF = """
-# syntax = "proto3";
+# PROTO_DEF = "A"
+PROTO_DEF = """
+syntax = "proto3";
 
-# import "google/protobuf/empty.proto";
+import "google/protobuf/empty.proto";
 
-# enum MoveDirection {
-#   MOVE_FORWARD = 0;
-#   MOVE_BACKWARD = 1;
-#   MOVE_LEFT = 2;
-#   MOVE_RIGHT = 3;
-# }
+enum MoveDirection {
+  MOVE_FORWARD = 0;
+  MOVE_BACKWARD = 1;
+  MOVE_LEFT = 2;
+  MOVE_RIGHT = 3;
+}
 
-# message MoveRequest {
-#   MoveDirection direction = 1;
-#   float duration = 2;
-# }
+message MoveRequest {
+  MoveDirection direction = 1;
+  float duration = 2;
+}
 
-# // Define the service for streaming keyboard input
-# service RobotControl {
-#   // Unary RPC: The client sends a MoveRequest. Asyhcronously moves the robot.
-#   rpc Move(MoveRequest) returns (google.protobuf.Empty);
-# }
-# """
+// Define the service for streaming keyboard input
+service RobotControl {
+  // Unary RPC: The client sends a MoveRequest. Asyhcronously moves the robot.
+  rpc Move(MoveRequest) returns (google.protobuf.Empty);
+}
+"""
 
 
 class gRPC(MovingCameraScene):
@@ -120,9 +120,7 @@ class gRPC(MovingCameraScene):
 
         self.play(FadeIn(message_dot), FadeIn(request_type))
         self.play(FadeIn(request_type))
-        # self.play(Indicate(user_client_code), run_time=1)
         self.play(message_dot.animate.move_to(user_server_code.get_left()), run_time=1, rate_func=linear)
-        # self.play(Indicate(user_server_code), run_time=1)
         self.play(message_dot.animate.move_to(user_client_code.get_right()), run_time=1, rate_func=linear)
         self.play(FadeOut(message_dot), FadeOut(request_type))
         self.wait(2.0)
