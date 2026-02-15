@@ -10,29 +10,29 @@ STEP_RUNTIME = 0.4
 class RAGDiagram(Scene):
     def construct(self):
         # ── Intro ──────────────────────────────────────────────────────
-        self.next_section(name="Intro", skip_animations=False)
+        # self.next_section(name="Intro", skip_animations=False)
 
-        rag = RectangleWithText("RAG", color=BLUE, font_size=44)
-        self.play(Create(rag))
-        self.wait(0.5)
+        # rag = RectangleWithText("RAG", color=BLUE, font_size=44)
+        # self.play(Create(rag))
+        # self.wait(0.5)
 
-        rag_text = VGroup(
-            Text("Retrieval"),
-            Text("Augmented"),
-            Text("Generation"),
-        ).arrange(RIGHT, buff=0.25).scale(0.85).move_to(rag)
-        self.play(
-            Transform(rag[1], rag_text),
-            Transform(rag[0], SurroundingRectangle(rag_text, color=BLUE)),
-        )
-        self.wait(0.8)
-        self.play(FadeOut(rag))
+        # rag_text = VGroup(
+        #     Text("Retrieval"),
+        #     Text("Augmented"),
+        #     Text("Generation"),
+        # ).arrange(RIGHT, buff=0.25).scale(0.85).move_to(rag)
+        # self.play(
+        #     Transform(rag[1], rag_text),
+        #     Transform(rag[0], SurroundingRectangle(rag_text, color=BLUE)),
+        # )
+        # self.wait(0.8)
+        # self.play(FadeOut(rag))
 
         # ── Phase 1  Indexing ──────────────────────────────────────────
         self.next_section(name="Indexing", skip_animations=False)
 
         phase_label = Text("Indexing", font_size=34, weight=BOLD, color=BLUE_B)
-        phase_label.to_edge(UP, buff=0.35)
+        phase_label.to_edge(UP, buff=0.55)
         self.play(Write(phase_label), run_time=STEP_RUNTIME)
 
         # ── Helper: bracket-wrapped matrix ────────────────────────────
@@ -64,7 +64,7 @@ class RAGDiagram(Scene):
         )
         doc_box = SurroundingRectangle(doc_sentence, color=YELLOW, buff=0.14)
         doc = VGroup(doc_box, doc_sentence)
-        doc_label = Text("Sentence / Prompt", font_size=14, color=YELLOW)
+        doc_label = Text("Document", font_size=14, color=YELLOW)
 
         token_vec = _make_text_matrix([["t1"], ["t2"], ["t3"]], color=YELLOW)
         token_sub = Text("Tokens", font_size=18, color=YELLOW)
@@ -156,16 +156,15 @@ class RAGDiagram(Scene):
         self.play(FadeIn(vec_label), FadeIn(vec_group))
         self.wait(0.3)
 
-        arrow_style = dict(buff=0.05, stroke_width=4, tip_length=0.18)
+        arrow_style = dict(buff=0.05, stroke_width=4, tip_length=0.18, max_tip_length_to_length_ratio=1, max_stroke_width_to_length_ratio=999)
         arrow_doc_to_embed = Arrow(doc.get_right(), embed_model.get_left(), color=WHITE, **arrow_style)
         arrow_embed_to_vec = Arrow(embed_model.get_right(), vec_group.get_left(), color=WHITE, **arrow_style)
         self.play(GrowArrow(arrow_doc_to_embed), GrowArrow(arrow_embed_to_vec))
-        self.play(Indicate(vec_group, color=GREEN))
         self.wait(0.3)
 
         # Update caption
         caption2 = Text(
-            "Similar meanings → nearby vectors",
+            "Similar meanings → nearby vectors directions",
             font_size=22,
             color=WHITE,
             slant=ITALIC,
@@ -177,7 +176,6 @@ class RAGDiagram(Scene):
         # Arrow into Vector DB + storage
         arrow_vec_to_db = Arrow(vec_group.get_right(), db.get_left(), color=PURPLE, **arrow_style)
         self.play(GrowArrow(arrow_vec_to_db), Create(db))
-        self.play(Indicate(db, color=PURPLE_A))
         self.wait(0.3)
 
         # Show stored vectors
@@ -205,7 +203,7 @@ class RAGDiagram(Scene):
         self.next_section(name="Retrieval", skip_animations=False)
 
         phase2_label = Text("Retrieval", font_size=34, weight=BOLD, color=BLUE_B)
-        phase2_label.to_edge(UP, buff=0.35)
+        phase2_label.to_edge(UP, buff=0.55)
         self.play(Write(phase2_label), run_time=STEP_RUNTIME)
 
         # Layout:  User Query → Embed → Query Vector → Vector DB → Result
@@ -297,7 +295,7 @@ class RAGDiagram(Scene):
         # Show query embedding box + arrows
         self.play(FadeIn(qvec_label), FadeIn(qvec_group))
 
-        arrow2_style = dict(buff=0.05, stroke_width=4, tip_length=0.18)
+        arrow2_style = dict(buff=0.05, stroke_width=4, tip_length=0.18, max_tip_length_to_length_ratio=1, max_stroke_width_to_length_ratio=999)
         arrow_q_to_embed = Arrow(query.get_right(), embed2.get_left(), color=WHITE, **arrow2_style)
         arrow_embed_to_qvec = Arrow(embed2.get_right(), qvec_group.get_left(), color=WHITE, **arrow2_style)
         self.play(GrowArrow(arrow_q_to_embed), GrowArrow(arrow_embed_to_qvec))
@@ -330,7 +328,6 @@ class RAGDiagram(Scene):
 
         # Show similarity scores
         self.play(LaggedStart(*[FadeIn(l, shift=UP * 0.1) for l in sim_lines], lag_ratio=0.15))
-        self.play(Indicate(sim_lines[0], color=GREEN))
         self.wait(0.5)
 
         # Show retrieved result
